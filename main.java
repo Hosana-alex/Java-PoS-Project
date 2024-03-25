@@ -162,7 +162,7 @@ class order{
     public order(){
         this.ordered_items = new menu_item[10];
         this.item_count = 0;
-        this.total_price = 0.0;
+        this.total_price = 0;
         this.order_status = "Pending";
 
     }
@@ -175,31 +175,27 @@ class order{
                 discounted_total += item.get_price();
             }
         }
-    
-        if (customer.is_loyalty_program_member()) {
-            Discount loyalty_discount = new Discount("10% off", 10, true);
-            if (loyalty_discount.is_percentage()) {
-                double discountAmount = (loyalty_discount.get_amount() / 100) * discounted_total;
-                discounted_total -= discountAmount;
-            } else {
-                discounted_total -= loyalty_discount.get_amount();
-            }
-    
-        } else {
-            Discount other_discount = new Discount("10$ off", 10, false);
-                if (other_discount.is_percentage()) {
-                    discounted_total -= (other_discount.get_amount() / 100) * discounted_total;
+
+        if(customer != null){
+        
+            if (customer.is_loyalty_program_member()) {
+                Discount loyalty_discount = new Discount("10% off", 10, true);
+                if (loyalty_discount.is_percentage()) {
+                    double discountAmount = (loyalty_discount.get_amount() / 100) * discounted_total;
+                    discounted_total -= discountAmount;
                 } else {
-                    discounted_total -= other_discount.get_amount();
-                }                
-            
+                    discounted_total -= loyalty_discount.get_amount();
+                }
+        
+            }
         }
-    
         total_price = discounted_total;
         return total_price;
     }
-    
-    
+    public menu_item[] get_ordered_items() {
+        return this.ordered_items;
+    }
+     
     public void add_item(menu_item item){
         if(item_count < ordered_items.length){
             ordered_items[item_count] = item;
