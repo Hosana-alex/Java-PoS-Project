@@ -292,8 +292,8 @@ public class gui_interface {
         
             if (amount_paid >= total_amount_due) {
                 JOptionPane.showMessageDialog(frame, "Payment successful! Change: ksh " + (amount_paid - total_amount_due));
-                clear_order();
                 show_receipt(current_customer, total_amount_due, amount_paid, total_amount_due);
+                clear_order();
             } else {
                 JOptionPane.showMessageDialog(frame, "Insufficient payment, please try again.");
             }
