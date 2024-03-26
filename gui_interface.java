@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class gui {
+public class gui_interface {
     private JFrame frame;
     private Menu menu;
     private order order;
@@ -14,7 +14,7 @@ public class gui {
     private Customer current_customer;
 
 
-    public gui(){
+    public gui_interface(){
         this.menu = new Menu();
         this.order = new order();
         create_and_show_gui();
@@ -75,7 +75,7 @@ public class gui {
     private String[] get_menu_items(menu_item[] items) {
         String[] menuItems = new String[items.length];
         for (int i = 0; i < items.length; i++) {
-            menuItems[i] = items[i].get_name() + " - $" + items[i].get_price();
+            menuItems[i] = items[i].get_name() + " - ksh " + items[i].get_price();
         }
         return menuItems;
     }
@@ -147,14 +147,14 @@ public class gui {
     
             ArrayList<String> itemStrings = new ArrayList<>();
             for (menu_item item : items) {
-                itemStrings.add(item.get_name() + " - $" + item.get_price());
+                itemStrings.add(item.get_name() + " - ksh " + item.get_price());
             }
     
             String selectedItemString = (String) JOptionPane.showInputDialog(frame, "Select an item to add:", "Add Item", JOptionPane.PLAIN_MESSAGE, null, itemStrings.toArray(new String[0]), null);
     
             if (selectedItemString != null) {
                 for (menu_item item : items) {
-                    if ((item.get_name() + " - $" + item.get_price()).equals(selectedItemString)) {
+                    if ((item.get_name() + " - ksh " + item.get_price()).equals(selectedItemString)) {
                         order.add_item(item);
                         update_order_details();  // Assuming order_details is accessible here
                         break;
@@ -175,17 +175,29 @@ public class gui {
         String[] itemStrings = new String[orderedItems.length];
         for (int i = 0; i < orderedItems.length; i++) {
             menu_item item = orderedItems[i];
-            String itemString = item.get_name() + " - $" + item.get_price();
-            itemStrings[i] = itemString;
-            itemMap.put(itemString, item);
+            if (item != null) {  // Ensure item is not null before accessing its properties
+                String itemString = item.get_name() + " - $" + item.get_price();
+                itemStrings[i] = itemString;
+                itemMap.put(itemString, item);
+            }
         }
     
-        String selectedItemString = (String) JOptionPane.showInputDialog(frame, "Select an item to remove:", "Remove Item", JOptionPane.PLAIN_MESSAGE, null, itemStrings, itemStrings[0]);
+        String selectedItemString = (String) JOptionPane.showInputDialog(
+            frame,
+            "Select an item to remove:",
+            "Remove Item",
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            itemStrings,
+            itemStrings[0]
+        );
+    
         if (selectedItemString != null && itemMap.containsKey(selectedItemString)) {
             order.remove_item(itemMap.get(selectedItemString));
             update_order_details(); // Refresh the order details
         }
     }
+    
     
     
     private void clear_order() {
@@ -315,7 +327,7 @@ public class gui {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(gui::new);
+        SwingUtilities.invokeLater(gui_interface::new);
     }
     
 
