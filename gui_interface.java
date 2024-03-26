@@ -293,6 +293,7 @@ public class gui_interface {
             if (amount_paid >= total_amount_due) {
                 JOptionPane.showMessageDialog(frame, "Payment successful! Change: ksh " + (amount_paid - total_amount_due));
                 clear_order();
+                show_receipt(current_customer, total_amount_due, amount_paid, total_amount_due);
             } else {
                 JOptionPane.showMessageDialog(frame, "Insufficient payment, please try again.");
             }
@@ -302,6 +303,26 @@ public class gui_interface {
     }
     
     
+    private void show_receipt(Customer customer, double total_amount_due, double amount_paid, double change) {
+        // Create a JTextArea to display the receipt
+        JTextArea receipt_area = new JTextArea(20, 30);
+        receipt_area.setEditable(false);
+    
+        // Build the receipt content
+        StringBuilder receipt_content = new StringBuilder();
+        receipt_content.append("Receipt\n\n");
+        receipt_content.append("Customer Name: ").append(customer.get_name()).append("\n");
+        receipt_content.append("Contact Information: ").append(customer.get_contact_information()).append("\n");
+        receipt_content.append("\nAmount Due: ksh ").append(String.format("%.2f", total_amount_due)).append("\n");
+        receipt_content.append("Amount Paid: ksh ").append(String.format("%.2f", amount_paid)).append("\n");
+        receipt_content.append("Change: ksh ").append(String.format("%.2f", change)).append("\n");
+        receipt_content.append("Welcome again!!");
+    
+        receipt_area.setText(receipt_content.toString());
+    
+        // Display the receipt in a JOptionPane
+        JOptionPane.showMessageDialog(frame, new JScrollPane(receipt_area), "Payment Receipt", JOptionPane.INFORMATION_MESSAGE);
+    }
     
     
     private Customer get_customer_details() {
